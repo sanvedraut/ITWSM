@@ -1,0 +1,49 @@
+──────────────────────────────────────────────
+EXPERIMENT – MATLAB EXPRESSION EVALUATION
+──────────────────────────────────────────────
+
+🎯 Aim:
+To write a MATLAB program that evaluates a mathematical expression using exponential, trigonometric, and square root functions.
+
+──────────────────────────────────────────────
+📘 QUESTION:
+Write a MATLAB program to calculate the value of 
+z = e^(-a) * sin(x) + 10 * √y
+for given values of a, x, and y.
+
+──────────────────────────────────────────────
+👣 Baby Steps:
+
+1️⃣ Open MATLAB software.  
+2️⃣ Click on *New Script* to open the editor window.  
+3️⃣ Type or copy the code given below.  
+4️⃣ Save the file as *ExpressionCalc.m*.  
+5️⃣ Click the *Run* button (or press F5).  
+6️⃣ See the result in the *Command Window*.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Given values 
+a = 10;
+x = 10;
+y = 20;
+
+% Expression 
+z = exp(-a) * sin(x) + 10 * sqrt(y);
+
+% Display result 
+disp(['The value of z is: ' num2str(z)]);
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+The value of z is: 44.72
+
+──────────────────────────────────────────────
+📘 RESULT:
+The MATLAB program successfully calculates the value of  
+z = e^(-a) * sin(x) + 10 * √y  
+using exponential, trigonometric, and square root functions.
+
+──────────────────────────────────────────────
