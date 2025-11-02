@@ -1,0 +1,339 @@
+EXERCISE:
+========================================================================================================================
+ 1. Creating and Overwriting Variables,
+ Create variables a = 10, b = 20.
+ Overwrite a with a new value a = 15.
+ Display the results.
+
+──────────────────────────────────────────────
+👣 Baby Steps:
+
+1️⃣ Open MATLAB software.  
+2️⃣ Click on *New Script* to open the editor window.  
+3️⃣ Type or copy the code given below.  
+4️⃣ Save the file as *VariableOverwrite.m*.  
+5️⃣ Click the *Run* button (or press F5).  
+6️⃣ See the result in the *Command Window*.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Create variables
+a = 10;
+b = 20;
+
+% Display initial values
+disp('Initial Values: ');
+disp(['a = ', num2str(a)]);
+disp(['b = ', num2str(b)]);
+
+% Overwrite variable a with a new value
+a = 15;
+
+% Display updated values
+disp('After Overwriting: ');
+disp(['a = ', num2str(a)]);
+disp(['b = ', num2str(b)]);
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+Initial Values:
+a = 10
+b = 20
+After Overwriting:
+a = 15
+b = 20
+
+──────────────────────────────────────────────
+
+=====================================================================================================================
+ 2. Error Messages and Corrections
+ Enter an invalid command (e.g., c = a +) and note the error message.
+ Correct the error by completing the statement properly (c = a + b).
+
+──────────────────────────────────────────────
+👣 Baby Steps:
+
+1️⃣ Open MATLAB.
+2️⃣ Click on *New Script*.
+3️⃣ Type the following code.
+4️⃣ Save the file as *AdditionProgram.m*.
+5️⃣ Click *Run* (or press F5).
+6️⃣ See the output in the Command Window.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Define the variables
+a = 10;
+b = 25;
+
+% Add the two numbers
+c = a + b;
+
+% Incorrect answer
+disp(['Corrected result: c = ', num2str(c])
+
+% Display the correct result
+disp(['Corrected Result: c = ', num2str(c)]);
+
+──────────────────────────────────────────────
+🧾 OUTPUT:
+
+Corrected Result: c = 35
+
+──────────────────────────────────────────────
+=====================================================================================================================
+
+ 3. Operator Precedence
+ Execute: x = 2 + 3 * 4
+ Execute: y = (2 + 3) * 4
+ Compare results and explain precedence.
+
+──────────────────────────────────────────────
+👣 Baby Steps:
+
+1️⃣ Open MATLAB.
+2️⃣ Click on *New Script*.
+3️⃣ Type or copy the following code.
+4️⃣ Save it as *Exp2_Expression.m*.
+5️⃣ Click *Run* (or press F5).
+6️⃣ Check the output in the *Command Window*.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Evaluate mathematical expressions
+x = 2 + 3 * 4;      % Multiplication happens first → 3*4 = 12, then add 2 → x = 14
+y = (2 + 3) * 4;    % Parentheses first → (2+3)=5, then multiply by 4 → y = 20
+
+% Display results
+disp(['Value of x = ', num2str(x)]);
+disp(['Value of y = ', num2str(y)]);
+
+──────────────────────────────────────────────
+🧾 OUTPUT:
+
+Value of x = 14
+Value of y = 20
+
+──────────────────────────────────────────────
+=====================================================================================================================
+ 4. Controlling Floating-Point Display
+ Set variable piVal = pi.
+ Use the following commands and observe results:
+ format short
+ piVal
+ format long
+ piVal
+ format bank
+ piVal
+
+──────────────────────────────────────────────
+👣 Baby Steps (Exercise 4 — Controlling Floating-Point Display):
+
+1️⃣ Open MATLAB.  
+2️⃣ Click on *New Script*.  
+3️⃣ Type or copy the code below.  
+4️⃣ Save the file as *Exp2_Exercise4_Display.m*.  
+5️⃣ Click *Run* (or press F5).  
+6️⃣ Observe how the output format changes in the *Command Window*.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Controlling Floating-Point Display
+
+% Set the variable
+piVal = pi;
+
+% Display in short format (4 decimal places)
+format short
+disp('Format: SHORT');
+disp(piVal);
+
+% Display in long format (15 decimal places)
+format long
+disp('Format: LONG');
+disp(piVal);
+
+% Display in bank format (2 decimal places)
+format bank
+disp('Format: BANK');
+disp(piVal);
+
+% Reset to default format
+format short
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+Format: SHORT
+    3.1416
+
+Format: LONG
+   3.141592653589793
+
+Format: BANK
+    3.14
+
+──────────────────────────────────────────────
+=====================================================================================================================
+ 5. Workspace Management
+ Create few variables (p = 100, q = 200).
+ Use who and whos to list variables.
+ Clear variable p only using clear p.
+ Clear all variables using clear all.
+
+──────────────────────────────────────────────
+👣 Baby Steps (Exercise 5 — Workspace Management):
+
+1️⃣ Open MATLAB.  
+2️⃣ Click on *New Script*.  
+3️⃣ Type or copy the code given below.  
+4️⃣ Save the file as *Exp2_Exercise5_Workspace.m*.  
+5️⃣ Click *Run* (or press F5).  
+6️⃣ Observe the variable list and workspace changes in the Command Window.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Workspace Management
+
+% Create variables
+p = 100;
+q = 200;
+
+% Display all variables (simple list)
+disp('Using who:');
+who
+
+% Display detailed variable information
+disp('Using whos:');
+whos
+
+% Clear variable 'p' only
+clear p
+disp('After clearing p:');
+who
+
+% Clear all variables
+clear all
+disp('After clearing all variables:');
+who
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+Using who:
+Your variables are:
+p  q
+
+Using whos:
+  Name      Size            Bytes  Class     Attributes
+  p         1x1                 8  double
+  q         1x1                 8  double
+
+After clearing p:
+Your variables are:
+q
+
+After clearing all variables:
+Your variables are:
+
+──────────────────────────────────────────────
+=====================================================================================================================
+ 6. Keeping Track of Session
+ Run several commands.
+ Use Command History window to review them.
+ Save the session history to a .m file.
+
+
+──────────────────────────────────────────────
+👣 Baby Steps (Exercise 6 — Keeping Track of Session):
+
+1️⃣ Open MATLAB.  
+2️⃣ In the Command Window, run a few commands one by one, for example:
+     a = 5;
+     b = 10;
+     c = a + b;
+     disp(c)
+
+3️⃣ Now, open the *Command History* panel:
+     → Go to *View* → *Command History*,  
+     OR press *Ctrl + ↑* in the Command Window.
+
+4️⃣ You will see the list of commands you recently ran.
+
+5️⃣ Right-click inside the Command History window and select  
+   *Save As...*
+
+6️⃣ Save the file as *SessionHistory.m* (or any name you like).
+
+7️⃣ Open the saved .m file to see all your previous commands.
+
+USE Ctrl + S also to save the file in desktop
+──────────────────────────────────────────────
+💻 SAMPLE COMMANDS USED:
+
+a = 5;
+b = 10;
+c = a + b;
+disp(c);
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+15
+
+──────────────────────────────────────────────
+💡 NOTE:
+The *Command History* helps you review, copy, and save your previous commands.  
+It is very useful for creating new scripts from past work.
+
+──────────────────────────────────────────────
+=====================================================================================================================
+
+ 7. Entering Multiple Statements per Line
+ write several statements in a single line and check the execution results
+
+──────────────────────────────────────────────
+👣 Baby Steps (Exercise 7 — Entering Multiple Statements per Line):
+
+1️⃣ Open MATLAB.  
+2️⃣ Click on *New Script* or work directly in the *Command Window*.  
+3️⃣ Type or copy the code below.  
+4️⃣ Save it as *Exp2_Exercise7_MultiLine.m* (if using script).  
+5️⃣ Click *Run* (or press F5).  
+6️⃣ Observe how MATLAB executes all statements on a single line.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Entering multiple statements in one line using semicolons
+
+a = 5; b = 10; c = a + b; d = a * b; e = b - a;
+
+% Display the results
+disp(['a = ', num2str(a)]);
+disp(['b = ', num2str(b)]);
+disp(['c = a + b = ', num2str(c)]);
+disp(['d = a * b = ', num2str(d)]);
+disp(['e = b - a = ', num2str(e)]);
+
+──────────────────────────────────────────────
+🧾 OUTPUT:
+
+a = 5
+b = 10
+c = a + b = 15
+d = a * b = 50
+e = b - a = 5
+
+──────────────────────────────────────────────
+💡 NOTE:
+You can write several commands on the same line by separating them with semicolons ( ; ).  
+Each statement is executed from left to right.
+
+──────────────────────────────────────────────
