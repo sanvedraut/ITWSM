@@ -1,0 +1,320 @@
+1. Prepare fnctioning flowcharts for if-end, if-else-end, and if-elseif-else-end. statements. 
+% Example: Grade evaluation
+marks = 78;
+
+if marks >= 90
+    disp('Grade A');
+elseif marks >= 75
+    disp('Grade B');
+elseif marks >= 50
+    disp('Grade C');
+else
+    disp('Grade F');
+end
+
+=====================================================
+
+% if-end Statement
+% Example: Check if a number is positive
+x = 5;
+
+if x > 0
+    disp('x is positive');
+end
+================================================
+
+% Example: Check if a number is even or odd
+n = 7;
+
+if mod(n,2) == 0
+    disp('n is even');
+else
+    disp('n is odd');
+end
+
+
+=====================================================================================================
+2. The following were the daily maximum temperatures (in F) in Washington, DC, during the month of April 2002: 58 73 73 53 50 48 56 73 73 66 69 63 74 828491 93 89 91 80 59 69 56 64 63 66 64 74 63 69 (data from the U.S. National
+Oceanic and Atmospheric Administration). Use relational and logical operations
+to determine the following:
+(a) The number of days the temperature was above 75 . (b) The number of days the temperature was between 65 and 80 . (c) The days of the month when the temperature was between 50 and 60 .====================================================>8.2
+
+T = [58 73 73 53 50 48 56 73 73 66 69 63 74 82 84 91 93 89 91 80 59 69 56 64 63 66 64 74 63 69];
+above75 = sum(T > 75);
+disp(['Days above 75°F: ', num2str(above75)]);
+
+between65_80 = sum(T >= 65 & T <= 80);
+disp(['Days between 65°F and 80°F: ', num2str(between65_80)]);
+
+days=find(T >= 50 & T <= 60);
+disp('Days between 50°F and 60°F:');
+disp(days);
+
+ 3. A worker is paid according to his hourly wage up to 40 hours, and 50%more for
+overtime. Write a program in a script file that calculates the pay to a worker. Theprogram asks the user to enter the number of hours and the hourly wage. Theprogram then displays the pay.==================================================>8.3
+
+hours = input('Enter total hours worked: ');
+wage=input('enter wage');
+if hours <= 40
+    pay = hours * wage;
+else
+    pay=(40*wage)+((hours-40)*(wage+(wage*0.5)));
+end
+fprintf('Total pay is: $%.2f\n', pay);
+
+ 4. Write a program in a script file that creates an matrix with elements that have thefollowing values. The value of each element in the first row is the number of thecolumn. The value of each element in the first column is the number of the row. The rest of the elements each has a value equal to the sum of the element aboveit
+and the element to the left. When executed, the program asks the user to enter
+values for n and m.==========================>8.4
+n = input('Enter number of rows: ');
+m = input('Enter number of columns: ');
+
+A = zeros(n,m);
+% Fill first row and first column
+A(1,:) = 1:m;
+A(:,1) = 1:n;
+
+% Fill remaining elements
+for i = 2:n
+    for j = 2:m
+        A(i,j) = A(i-1,j) + A(i,j-1);
+    end
+end
+
+disp('Generated Matrix:');
+disp(A);
+
+ 5. A person in retirement is depositing $300,000 in a saving account that pays 5%interest per year. The person plans to withdraw money from the account onceayear. He starts by withdrawing $25,000 after the first year, and in future years heincreases the amount he withdraws according to the inflation rate. For example, if
+the inflation rate is 3%, he withdraws $25,750 after the second year. Calculate thenumber of years the money in the account will last assuming a constant yearlyinflation rate of 2%. Make a plot that shows the yearly withdrawals andthebalance of the account over the years.===========================>8.5
+
+%% Retirement Savings Account Simulation with Inflation
+
+% --- Parameters ---
+initial_deposit = 300000;
+interest_rate = 0.05;    % 5% per year
+first_withdrawal = 25000;
+inflation_rate = 0.02;   % 2% per year
+max_years = 100;         % Safety limit
+
+% --- Initialization ---
+balance = initial_deposit;
+withdrawal = first_withdrawal;
+year = 0;
+data = []; % Initialize array to store results
+
+% Store initial state (Year 0)
+data(end+1, :) = [year, balance, 0, 0, balance];
+
+% --- Simulation Loop ---
+while balance > 0 && year < max_years
+    year = year + 1;
+
+    % Balance at the start of the year (End of previous year)
+    start_balance = balance;
+
+    % 1. Calculate Interest
+    interest = start_balance * interest_rate;
+
+    % 2. Balance after Interest
+    balance_after_interest = start_balance + interest;
+
+    % 3. Calculate Withdrawal for the current year
+    if year == 1
+        current_withdrawal = first_withdrawal;
+    else
+        % Increase the withdrawal amount by the inflation rate
+        withdrawal = withdrawal * (1 + inflation_rate);
+        current_withdrawal = withdrawal;
+    end
+
+    % 4. New Balance after Withdrawal
+    new_balance = balance_after_interest - current_withdrawal;
+
+    % Store data for the year: [Year, Start_Balance, Interest, Withdrawal, End_Balance]
+    data(end+1, :) = [year, start_balance, interest, current_withdrawal, new_balance];
+
+    % Update balance for the next iteration
+    balance = new_balance;
+
+    % If the balance went negative, the money lasted until this year's withdrawal
+    if balance <= 0
+        break;
+    end
+end
+
+% --- Output Results ---
+last_year = data(end, 1);
+
+disp('--- Simulation Results ---');
+fprintf('The money lasts for *%d years*.\n', last_year);
+fprintf('Final End Balance (after last withdrawal): *$%.2f*\n', data(end, 5));
+disp(' ');
+
+% Display the data table
+column_names = {'Year', 'Start Balance', 'Interest', 'Withdrawal', 'End Balance'};
+disp(column_names);
+disp(data); % Display the entire array
+
+% --- Plotting ---
+
+% Extract data for years > 0
+years_plot = data(2:end, 1);
+balance_plot = data(2:end, 5); % End Balance
+withdrawal_plot = data(2:end, 4); % Withdrawal
+
+figure; % Create a new figure
+hold on; % Allow multiple plots on the same axes
+
+% Plot Account Balance
+plot(years_plot, balance_plot, 'b-o', 'LineWidth', 2, 'MarkerFaceColor', 'b', 'DisplayName', 'Account Balance (End of Year)');
+
+% Plot Yearly Withdrawal
+plot(years_plot, withdrawal_plot, 'r--', 'LineWidth', 2, 'DisplayName', 'Yearly Withdrawal');
+
+% --- Plot Customization ---
+title('Retirement Account Balance and Yearly Withdrawals Over Time');
+xlabel('Year');
+ylabel('Amount ($)');
+grid on;
+legend('Location', 'northeast');
+xticks(years_plot(1:2:end)); % Show every second year on the x-axis for better readability
+hold off;
+
+6. Use loops to create a matrix in which the value of each element is the sumof its
+row number and its column number divided by the square of its column number. =========================>8.6
+
+n = input('Enter number of rows: ');
+m = input('Enter number of columns: ');
+
+A = zeros(n,m);
+
+for i = 1:n
+    for j = 1:m
+        A(i,j) = (i + j) / (j^2);
+    end
+end
+
+disp('Generated Matrix:');
+disp(A);
+
+7. Write a program in a script file that finds the smallest odd integer that is divisibleby 11 and whose square root is greater than 132. Use a loop in the program. Theloop should start from 1 and stop when the number is found. The programprints
+the message “The required number is:” and then prints the number.===================>8.7
+clc; clear; close all;
+
+n = 1;   % Start loop from 1
+while true
+    if mod(n,2) ~= 0 && mod(n,11) == 0 && sqrt(n) > 132
+        fprintf('The required number is: %d\n', n);
+        break;   % Stop loop when number found
+    end
+    n = n + 1;
+end
+
+ 8. A vector is given by x = [–3.5 5 –6.2 11.1 0 7 –9.5 2 15 –1 3 2.5]. Usingconditional statements and loops, write a program that rearranges the elements of
+x in order from the smallest to the largest. Do not use MATLAB’s built-infunction sort.================================>8.8
+
+clc; clear; close all;
+
+x = [-3.5 5 -6.2 11.1 0 7 -9.5 2 15 -1 3 2.5];
+n = length(x);
+
+for i = 1:n-1
+    for j = i+1:n
+        if x(i) > x(j)
+            temp = x(i);
+            x(i) = x(j);
+            x(j) = temp;
+        end
+    end
+end
+
+disp('Rearranged vector (ascending order):');
+disp(x);
+
+ 9. The following is a list of 20 exam scores. Write a computer programthat
+calculates the average of the top 8 scores. Exam scores: 73, 91, 37, 81, 63, 66, 50, 90, 75, 43, 88, 80, 79, 69, 26, 82, 89, 99, 71, 59===========>8.9
+clc; clear; close all;
+
+scores = [73,91,37,81,63,66,50,90,75,43,88,80,79,69,26,82,89,99,71,59];
+
+% Sort in descending order using sort function
+sorted_scores = sort(scores, 'descend');
+
+% Take top 8 scores
+top8 = sorted_scores(1:8);
+
+% Compute average of top 8
+avg_top8 = mean(top8);
+
+fprintf('Average of top 8 scores = %.2f\n', avg_top8);
+
+10. Write a program that determines the center and the radius of a circle that passes
+through three given points. The program asks the user to enter the coordinates of
+the points one at a time. The program displays the coordinate of the center andthe radius, and makes a plot of the circle and the three points displayed ontheplot with asterisk markers. Execute the program to find the circle that passes
+through the points (13, 15), (4, 18), and (19, 3).===================>8.10
+
+clc; clear; close all;
+
+% Given points
+x1 = 13; y1 = 15;
+x2 = 4;  y2 = 18;
+x3 = 19; y3 = 3;
+
+% Calculate determinants
+A = 2 * [x2 - x1, y2 - y1; x3 - x1, y3 - y1];
+B = [x2^2 - x1^2 + y2^2 - y1^2; x3^2 - x1^2 + y3^2 - y1^2];
+center = A\B;
+
+xc = center(1);
+yc = center(2);
+
+r = sqrt((x1 - xc)^2 + (y1 - yc)^2);
+
+fprintf('Center: (%.3f, %.3f)\n', xc, yc);
+fprintf('Radius: %.3f\n', r);
+
+% Plot circle and points
+theta = linspace(0, 2*pi, 360);
+x_circle = xc + r*cos(theta);
+y_circle = yc + r*sin(theta);
+
+plot(x_circle, y_circle, 'b-', 'LineWidth',1.5);
+hold on;
+plot([x1 x2 x3], [y1 y2 y3], 'r*', 'MarkerSize',8);
+axis equal;
+grid on;
+title('Circle passing through three points');
+
+ 11. Write a MATLAB program in a script file that finds a positive integer n suchthat
+the sum of all the integers 1+2+3 +….+n is a number between 100 and 1000whose three digits are identical. As output the program displays the integer nandthe corresponding sum.===============================================================>8.11
+
+clc; clear; close all;
+
+n = 1;
+while true
+    s = n*(n+1)/2;
+    if s >= 100 && s <= 1000
+        digits = num2str(s);
+        if length(unique(digits)) == 1   % All digits identical
+            fprintf('n = %d, Sum = %d\n', n, s);
+            break;
+        end
+    elseif s > 1000
+        break;
+    end
+    n = n + 1;
+end
+
+ 12. A twin primes is a pair of prime numbers such that the difference between themis 2 (for example, 17 and 19). Write a MATLAB program that finds all the twinprimes between 10 and 500. The program displays the results in a two-columnmatrix in which each row is a twin prime.====================>8.12
+
+clc; clear; close all;
+
+twin_primes = [];   % Store pairs
+
+for n = 10:500
+    if isprime(n) && isprime(n+2)
+        twin_primes = [twin_primes; n, n+2];
+    end
+end
+
+disp('Twin primes between 10 and 500:');
+disp(twin_primes);
