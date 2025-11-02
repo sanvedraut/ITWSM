@@ -1,0 +1,246 @@
+──────────────────────────────────────────────
+EXPERIMENT 6 – WORKING WITH MATLAB M-FILES
+──────────────────────────────────────────────
+Exercise 1:
+👣 BABY STEPS (Exercise 6.1 — Signum Function)
+
+1️⃣ Open MATLAB.  
+2️⃣ Click *New Script*.  
+3️⃣ Copy the code below.  
+4️⃣ Save as *Exp6_Exercise1_Signum.m*.  
+5️⃣ Click *Run* (F5).  
+6️⃣ See the Signum function plot in the Figure window.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+% Define time range
+t = -5:0.1:5;
+
+% Signum function: y = -1 for t<0, 0 for t=0, +1 for t>0
+y = sign(t);
+
+% Plot
+figure;
+plot(t, y, 'b', 'MarkerSize', 15);
+ylim([-1.5,1.5])
+title('Signum Function');
+xlabel('t');
+ylabel('sign(t)');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📈 A blue step-like plot showing:
+- y = -1 for t < 0  
+- y = 0 for t = 0  
+- y = 1 for t > 0  
+
+──────────────────────────────────────────────
+
+
+Exercise 2:
+👣 BABY STEPS (Exercise 6.2 — Exponentially Growing Signal)
+
+1️⃣ Open MATLAB → *New Script*.  
+2️⃣ Copy the code below.  
+3️⃣ Save as *Exp6_Exercise2_ExpGrow.m*.  
+4️⃣ Click *Run* (F5).  
+5️⃣ Observe the exponentially increasing curve.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+t = 0:0.1:10;     % Time vector
+a = 0.5;          % Growth rate
+x = exp(a*t);     % Exponential growth
+
+% Plot
+figure;
+plot(t, x, 'r', 'LineWidth', 1.5);
+title('Exponentially Growing Signal');
+xlabel('Time (t)');
+ylabel('x(t) = e^{0.5t}');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📈 A red upward curve showing exponential growth over time.
+
+──────────────────────────────────────────────
+
+Exercise 3:
+
+👣 BABY STEPS (Exercise 6.3 — Exponentially Decaying Signal)
+
+1️⃣ Open MATLAB → *New Script*.  
+2️⃣ Copy the code below.  
+3️⃣ Save as *Exp6_Exercise3_ExpDecay.m*.  
+4️⃣ Run and view the decaying waveform.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+t = 0:0.1:10;     % Time vector
+a = -0.5;         % Decay rate
+x = exp(a*t);     % Exponential decay
+
+% Plot
+figure;
+plot(t, x, 'g', 'LineWidth', 1.5);
+title('Exponentially Decaying Signal');
+xlabel('Time (t)');
+ylabel('x(t) = e^{-0.5t}');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📉 A green curve starting high and gradually approaching zero — exponential decay.
+
+──────────────────────────────────────────────
+
+Exercise 4:
+
+👣 BABY STEPS (Exercise 6.4 — Subtract and Multiply Two Sinusoids)
+
+1️⃣ Open MATLAB → *New Script*.  
+2️⃣ Copy the code below.  
+3️⃣ Save as *Exp6_Exercise4_SinusoidOps.m*.  
+4️⃣ Click *Run* (F5).  
+5️⃣ Observe all three plots: two signals, subtraction, and multiplication.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+% Define time
+t = 0:0.001:1;
+
+% Define two sinusoids
+f1 = 5;           % Frequency 1
+f2 = 10;          % Frequency 2
+x1 = sin(2*pi*f1*t);
+x2 = sin(2*pi*f2*t);
+
+% Subtract and multiply
+y_sub = x1 - x2;
+y_mul = x1 .* x2;   % Element-wise multiplication
+
+% Plot
+figure;
+subplot(3,1,1);
+plot(t, x1, 'b', t, x2, 'r--', 'LineWidth', 1.5);
+title('Two Sinusoidal Signals');
+xlabel('Time (s)');
+ylabel('Amplitude');
+legend('x1(t)','x2(t)');
+grid on;
+
+subplot(3,1,2);
+plot(t, y_sub, 'm', 'LineWidth', 1.5);
+title('Subtracted Signal: x1(t) - x2(t)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+grid on;
+
+subplot(3,1,3);
+plot(t, y_mul, 'k', 'LineWidth', 1.5);
+title('Multiplied Signal: x1(t) * x2(t)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📊 Three subplots:
+🔹 (Top) Blue and red sinusoids  
+🔹 (Middle) Magenta subtraction wave  
+🔹 (Bottom) Black multiplied waveform
+
+──────────────────────────────────────────────
+
+Exercise 5:
+
+👣 BABY STEPS (Exercise 6.5 — Fahrenheit to Celsius & Thermal Expansion)
+
+1️⃣ Open MATLAB.  
+2️⃣ Click *New Script*.  
+3️⃣ Copy both the *function* and *main script* code below.  
+4️⃣ Save the first as *FtoC.m* (function file).  
+5️⃣ Save the second as *Exp6_Exercise5_ThermalExpansion.m*.  
+6️⃣ Click *Run* (F5).  
+7️⃣ See the results printed in the Command Window.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% ---------- FtoC.m (Function File) ----------
+function C = FtoC(F)
+% FtoC Converts Fahrenheit to Celsius
+% Formula: C = (F - 32) * 5/9
+C = (F - 32) * 5/9;
+end
+
+
+% ---------- Exp6_Exercise5_ThermalExpansion.m ----------
+clc; clear; close all;
+
+% Given data
+alpha = 23e-6;          % Coefficient of linear expansion (1/°C)
+L1 = 4.5;               % Length in meters
+L2 = 2.25;              % Breadth in meters
+T1_F = 40;              % Initial temperature (°F)
+T2_F = 92;              % Final temperature (°F)
+
+% Convert Fahrenheit to Celsius using user-defined function
+T1_C = FtoC(T1_F);
+T2_C = FtoC(T2_F);
+
+% Calculate change in temperature (in °C)
+dT = T2_C - T1_C;
+
+% Calculate change in length and area
+% ΔL = α * L * ΔT
+dL1 = alpha * L1 * dT;
+dL2 = alpha * L2 * dT;
+
+% New dimensions
+L1_new = L1 + dL1;
+L2_new = L2 + dL2;
+
+% Change in area
+A_initial = L1 * L2;
+A_new = L1_new * L2_new;
+dA = A_new - A_initial;
+
+% Display results
+fprintf('Initial Area: %.6f m^2\n', A_initial);
+fprintf('New Area: %.6f m^2\n', A_new);
+fprintf('Change in Area (ΔA): %.6f m^2\n', dA);
+fprintf('Temperature Change (ΔT): %.2f °C\n', dT);
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+Initial Area: 10.125000 m²  
+New Area: 10.126933 m²  
+Change in Area (ΔA): 0.001933 m²  
+Temperature Change (ΔT): 28.89 °C  
+
+──────────────────────────────────────────────
+💡 NOTE:
+The program converts temperature from °F to °C,  
+calculates change in area due to thermal expansion, and displays results.
+
+──────────────────────────────────────────────
