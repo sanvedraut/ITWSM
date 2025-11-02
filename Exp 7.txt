@@ -1,0 +1,403 @@
+Find the errors in following sample code and correct them with explanation.
+ 1. % Calculate sum of first 10 integers
+sum = 0
+for i = 1:10
+sum = sum + i
+end
+disp(['Sum = ', num2str(sum)]);=========>7.1
+
+🔍 Errors:
+Missing semicolons ; at the end of lines → causes unnecessary output at every step.
+Variable name sum shadows MATLAB’s built-in function sum() — not an error, but bad practice.
+
+% Calculate sum of first 10 integers
+total = 0;
+for i = 1:10
+    total = total + i;
+end
+disp(['Sum = ', num2str(total)]);
+==============================================================================================================
+
+2. % Area of a rectangle
+length = 5;
+area = length * width;
+disp(['Area = ', num2str(area)]);============>7.2
+
+🔍 Errors:
+
+Variable width is undefined before it is used.
+Variable name length again shadows MATLAB’s built-in function length().
+
+✅ Corrected Code:
+% Area of a rectangle
+len = 5;
+width = 3;
+area = len * width;
+disp(['Area = ', num2str(area)]);
+==============================================================================================================
+
+3. % Average of numbers
+x = [10 20 30 40];
+avg = sum(x) / length(x)^2;
+disp(['Average = ', num2str(avg)]);
+4. % Division operation
+a = 10; b = 0;
+c = a / b;
+disp(['Result = ', num2str(c)]);===========>7.3
+
+🔍 Errors:
+
+Formula for average is incorrect → should divide by length(x), not squared.
+Although not an error, semicolon missing after assignment.
+
+✅ Corrected Code:
+% Average of numbers
+x = [10 20 30 40];
+avg = sum(x) / length(x);
+disp(['Average = ', num2str(avg)]);
+==============================================================================================================
+
+4. % Division operation
+a = 10; b = 0;
+c = a / b;
+disp(['Result = ', num2str(c)]);=======>7.4
+
+In MATLAB:
+
+This does not cause a crash or syntax error.
+MATLAB returns Inf (infinity) for division by zero (if a ≠ 0).
+If both a and b are 0, the result would be NaN (Not a Number).
+So the code will run, but the result is mathematically invalid:
+Result = Inf
+
+✅ Corrected Code (Method 1: Avoid division by zero)
+% Division operation
+a = 10; 
+b = 2;  % Assign a nonzero denominator
+c = a / b;
+disp(['Result = ', num2str(c)]);
+==============================================================================================================
+
+5. % Function to compute factorial
+n = 5;
+f = factorials(n);
+disp(['Factorial = ', num2str(f)]);==========>7.5
+
+🔍 Error:
+
+MATLAB function name is factorial, not factorials.
+
+✅ Corrected Code:
+n = 5;
+f = factorial(n);
+disp(['Factorial = ', num2str(f)]);
+==============================================================================================================
+
+6. % Access array element
+A = [3 5 7 9];
+val = A(5);
+disp(['Value = ', num2str(val)]);=============>7.6
+
+🔍 Error:
+
+The array A has 4 elements → indices 1 to 4 only.
+A(5) is out of bounds.
+
+✅ Corrected Code:
+A = [3 5 7 9];
+val = A(4);
+disp(['Value = ', num2str(val)]);
+
+🧠 Explanation:
+
+In MATLAB, indexing starts from 1. Accessing A(5) causes an index exceeds array bounds error.
+==============================================================================================================
+
+7. % While loop error
+i = 1;
+while i <= 5
+disp(i);
+End=====================>7.7
+
+🔍 Errors:
+
+MATLAB is case-sensitive → must use lowercase end.
+Missing increment (i = i + 1;) causes infinite loop.
+
+✅ Corrected Code:
+i = 1;
+while i <= 5
+    disp(i);
+    i = i + 1;
+end
+
+🧠 Explanation:
+
+Always increment loop variable inside while to avoid infinite loop.
+End (capitalized) is not recognized — must be end.
+
+==============================================================================================================
+
+8. % Temperature conversion
+C = 25;
+F = (9/5) * c + 32;
+disp(['Fahrenheit = ', num2str(F)]);=========>7.8
+
+🔍 Error:
+
+Variable name mismatch → defined C but used lowercase c (MATLAB is case-sensitive).
+
+✅ Corrected Code:
+C = 25;
+F = (9/5) * C + 32;
+disp(['Fahrenheit = ', num2str(F)]);
+
+🧠 Explanation:
+
+Use consistent variable naming; MATLAB distinguishes between C and c.
+==============================================================================================================
+
+
+9. % Function to square a number
+function y = squareValue(x)
+% Function to square a number
+y = x * x + ;
+End=============================================>7.9
+🔍 Errors:
+
+Extra + sign → incomplete expression.
+End must be lowercase end.
+
+✅ Corrected Code:
+function y = squareValue(x)
+% Function to square a number
+y = x * x;
+end
+
+🧠 Explanation:
+
+Remove the stray + and use end in lowercase to properly terminate function.
+
+==============================================================================================================
+
+10. % Function to calculate rectangle area and perimeter
+function [area, peri] = rectangleCalc(l, w)
+% Function to calculate rectangle area and perimeter
+area = l * w
+peri = 2*(l + w);=======================================>7.10
+
+🔍 Errors:
+
+Missing semicolons → prints intermediate results.
+Missing end statement to close function.
+
+✅ Corrected Code:
+function [area, peri] = rectangleCalc(l, w)
+% Function to calculate rectangle area and perimeter
+area = l * w;
+peri = 2 * (l + w);
+end
+
+🧠 Explanation:
+
+Every function must end with end.
+Add semicolons to suppress output.
+
+==============================================================================================================
+
+11. % Sum of first n integers
+n = 10;
+s = 0;
+for i = 1:n-1
+s = s + i;
+end
+disp(['Sum = ', num2str(s)]);=======================>7.11
+🔍 Error:
+
+The loop runs only till n-1 → excludes the last integer (10).
+
+✅ Corrected Code:
+n = 10;
+s = 0;
+for i = 1:n
+    s = s + i;
+end
+disp(['Sum = ', num2str(s)]);
+
+🧠 Explanation:
+To include n, use for i = 1:n.
+==============================================================================================================
+
+12. % Quadratic formula
+a = 1; b = 5; c = 6;
+root1 = (-b + sqrt(b^2 - 4*a*c)) / 2*a;
+root2 = (-b - sqrt(b^2 - 4*a*c)) / 2*a;
+disp([root1 root2]);===========================>7.12
+🔍 Error:
+
+Operator precedence error: / 2*a is interpreted as
+((...)/2) * a instead of (...)/(2*a).
+
+✅ Corrected Code:
+a = 1; b = 5; c = 6;
+root1 = (-b + sqrt(b^2 - 4*a*c)) / (2*a);
+root2 = (-b - sqrt(b^2 - 4*a*c)) / (2*a);
+disp([root1 root2]);
+==============================================================================================================
+
+13. % Access element in matrix
+M = magic(4);
+val = M(5,2);
+disp(['Value = ', num2str(val)]);=============>7.13
+
+🔍 Error:
+
+The magic(4) function creates a 4×4 matrix (indices 1–4 in both dimensions).
+
+Trying to access M(5,2) → Index exceeds matrix dimensions.
+
+✅ Corrected Code:
+M = magic(4);
+val = M(4,2);
+disp(['Value = ', num2str(val)]);
+
+🧠 Explanation:
+
+The first index (row) and second index (column) must both be ≤ 4 for a 4×4 matrix.
+==============================================================================================================
+
+14. % Calculate average of vector
+function avg = myAverage(x)
+% Calculate average of vector
+n = length(x);
+total = 0;
+for i = 1:n
+total = total + x; % Error
+end
+avg = total / n;
+End=======================================>7.14
+
+🔍 Errors:
+
+Inside the loop, using x instead of x(i) → adds whole vector repeatedly.
+End should be lowercase end.
+
+✅ Corrected Code:
+function avg = myAverage(x)
+% Calculate average of vector
+n = length(x);
+total = 0;
+for i = 1:n
+    total = total + x(i);
+end
+avg = total / n;
+end
+
+🧠 Explanation:
+
+Use x(i) to access individual elements during summation.
+MATLAB is case-sensitive, so use end to close the function.
+
+==============================================================================================================
+
+15. % Recursive Fibonacci
+function f = fib(n)
+% Recursive Fibonacci
+if n == 1 || n == 2
+f = 1;
+else
+f = fib(n-1) + fib(n-3); % Error
+end
+end======================================>7.15
+🔍 Error:
+
+Fibonacci recurrence is F(n) = F(n−1) + F(n−2), not F(n−3).
+
+✅ Corrected Code:
+function f = fib(n)
+% Recursive Fibonacci
+if n == 1 || n == 2
+    f = 1;
+else
+    f = fib(n-1) + fib(n-2);
+end
+end
+
+🧠 Explanation:
+
+Each Fibonacci number is the sum of the previous two terms, not previous three.
+==============================================================================================================
+
+
+16. % String concatenation with numbers
+age = 21;
+name = 'Alice';
+disp(['Name: ' name ' Age: ' age]);=====================>7.16
+
+🔍 Error:
+
+MATLAB cannot concatenate a string with a number directly inside [ ].
+
+✅ Corrected Code:
+age = 21;
+name = 'Alice';
+disp(['Name: ' name ' Age: ' num2str(age)]);
+
+🧠 Explanation:
+
+Convert numeric variables to strings using num2str() before concatenation.
+==============================================================================================================
+
+17. % Find smallest k such that sum(1:k) > 50
+k = 0; s = 0;
+while s < 50
+s = s + k;
+k = k + 1;
+end
+disp(['k = ', num2str(k)]);========================>7.17
+
+🔍 Error:
+
+The logic is off by one — the first addition uses k = 0, so it starts summing from zero.
+The result will be k = 11 instead of k = 10 (off by one).
+
+✅ Corrected Code:
+k = 1; s = 0;
+while s <= 50
+    s = s + k;
+    k = k + 1;
+end
+disp(['k = ', num2str(k)]);
+
+🧠 Explanation:
+
+Start from k = 1 since the sum starts at 1.
+The loop condition s <= 50 ensures you stop as soon as the sum exceeds 50.
+==============================================================================================================
+
+18. % Multiplication table
+for i = 1:5
+for j = 1:5
+T(i,j) = i*j;
+end
+end
+disp(T);================================>7.18
+
+🔍 Error:
+
+No syntax error — this code is actually correct.
+
+However, for best practice, preallocate T for efficiency.
+
+✅ Improved Version:
+T = zeros(5,5);  % Preallocate for efficiency
+for i = 1:5
+    for j = 1:5
+        T(i,j) = i * j;
+    end
+end
+disp(T);
+
+🧠 Explanation:
+
+Preallocating the matrix (zeros(5,5)) avoids dynamic resizing in each iteration.
