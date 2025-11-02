@@ -1,0 +1,343 @@
+EXP10========================================================================>10
+CNN for Image Classification
+1. Load dataset (e.g., CIFAR-10 or custom). 2. Split into training and testing sets. 3. Load a pretrained CNN (e.g., AlexNet). 4. Replace the final layer with a new classification layer. 5. Train the network. 6. Evaluate accuracy. =====>10.1
+
+clc; clear; close all;
+dataFolder = fullfile(tempdir, 'cifar-10-batches-mat');
+if ~exist(dataFolder, 'dir')
+    disp('Downloading CIFAR-10 dataset (one-time only)...');
+    tarFile = fullfile(tempdir, 'cifar-10-matlab.tar.gz');
+    url = 'https://www.cs.toronto.edu/~kriz/cifar-10-matlab.tar.gz';
+    websave(tarFile, url);
+    untar(tarFile, tempdir);
+end
+
+% Helper to load a single batch
+function [X, Y] = loadBatch(folder, fileName)
+    s = load(fullfile(folder, fileName));
+    % Convert [N x 3072] to [32, 32, 3, N] (images are stored row-wise)
+    data = double(s.data);
+    N = size(data, 1);
+    images = reshape(data', 32, 32, 3, N);
+    images = permute(images, [2 1 3 4]); % Now [32, 32, 3, N]
+    labels = categorical(s.labels + 1); % MATLAB expects classes starting at 1
+    X = images;
+    Y = labels;
+end
+
+% Load all training batches (concatenate along 4th dim)
+XTrain = [];
+YTrain = [];
+for i = 1:5
+    [Xi, Yi] = loadBatch(dataFolder, sprintf('data_batch_%d.mat', i));
+    if isempty(XTrain)
+        XTrain = Xi;
+    else
+        XTrain = cat(4, XTrain, Xi);
+    end
+    YTrain = [YTrain; Yi];
+end
+
+% Load test batch
+[XTest, YTest] = loadBatch(dataFolder, 'test_batch.mat');
+
+% Check dimensions
+fprintf('XTrain: [%d %d %d %d], YTrain: [%d %d]\n', size(XTrain,1), size(XTrain,2), size(XTrain,3), size(XTrain,4), size(YTrain,1), size(YTrain,2));
+fprintf('XTest: [%d %d %d %d], YTest: [%d %d]\n', size(XTest,1), size(XTest,2), size(XTest,3), size(XTest,4), size(YTest,1), size(YTest,2));
+
+% Define CNN
+layers = [
+    imageInputLayer([32 32 3])
+    convolution2dLayer(3,16,'Padding','same')
+    batchNormalizationLayer
+    reluLayer
+    maxPooling2dLayer(2,'Stride',2)
+    convolution2dLayer(3,32,'Padding','same')
+    batchNormalizationLayer
+    reluLayer
+    fullyConnectedLayer(10)   % CIFAR-10 has 10 classes
+    softmaxLayer
+    classificationLayer
+];
+
+options = trainingOptions('adam', ...
+    'MaxEpochs', 3, ...
+    'MiniBatchSize', 64, ...
+    'Plots','training-progress', ...
+    'Verbose',false);
+
+disp('Training the CNN...');
+net = trainNetwork(XTrain, YTrain, layers, options);
+
+disp('Evaluating accuracy...');
+YPred = classify(net, XTest);
+accuracy = mean(YPred == YTest);
+fprintf('Test accuracy: %.2f%%\n', accuracy*100);
+
+CNN for Image Segmentation
+1. Load dataset with images and pixel label data. 2. Define CNN architecture (SegNet/U-Net). 3. Train network. 4. Predict segmentation on test images.============>10.2
+
+without dataset===>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+clc; clear; close all;
+
+% Create temporary folders
+dataFolder = fullfile(tempdir,'SyntheticShapes');
+imageFolder = fullfile(dataFolder,'images');
+labelFolder = fullfile(dataFolder,'labels');
+if ~exist(imageFolder, 'dir'); mkdir(imageFolder); end
+if ~exist(labelFolder, 'dir'); mkdir(labelFolder); end
+
+imageSize = [128 128 3];
+
+numImages = 3; % Circle, Square, Triangle
+for k = 1:numImages
+    img = uint8(255 * ones(imageSize)); % white background
+    lbl = zeros(imageSize(1), imageSize(2), 'uint8'); % background label=0
+    
+    switch k
+        case 1 % Circle
+            [X, Y] = meshgrid(1:imageSize(2), 1:imageSize(1));
+            center = [64, 64];
+            radius = 40;
+            mask = (X - center(1)).^2 + (Y - center(2)).^2 <= radius^2;
+            img(:,:,1) = uint8(mask)*255; % red circle
+            lbl(mask) = 1;
+        case 2 % Square
+            img(44:84,44:84,2) = 255; % green square
+            lbl(44:84,44:84) = 1;
+        case 3 % Triangle
+            mask = poly2mask([64 100 28], [20 90 90], imageSize(1), imageSize(2));
+            img(:,:,3) = uint8(mask)*255; % blue triangle
+            lbl(mask) = 1;
+    end
+
+    % Save images and labels
+    imwrite(img, fullfile(imageFolder, sprintf('img%d.png', k)));
+    imwrite(lbl, fullfile(labelFolder, sprintf('label%d.png', k)));
+end
+
+% Create datastores
+imds = imageDatastore(imageFolder);
+classNames = ["background","shape"];
+labelIDs = [0 1];
+pxds = pixelLabelDatastore(labelFolder, classNames, labelIDs);
+
+ds = combine(imds, pxds);
+
+% Define U-Net architecture for 128x128 images
+lgraph = unetLayers([128 128 3], 2);
+
+options = trainingOptions('adam', ...
+    'InitialLearnRate',1e-3, ...
+    'MaxEpochs',10, ...
+    'MiniBatchSize',2, ...
+    'Plots','training-progress');
+
+% Train network
+net = trainNetwork(ds, lgraph, options);
+
+% Test on first image
+testImg = readimage(imds,1);
+C = semanticseg(testImg, net);
+B = labeloverlay(testImg, C);
+figure; imshow(B); title('Predicted Segmentation - Circle');
+
+without dataset==========>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+% Set dataset folder
+datasetFolder = fullfile(tempdir, 'CamVid');
+
+% Check if dataset is already downloaded
+if ~exist(datasetFolder, 'dir')
+    disp('Downloading CamVid dataset...');
+    urlImages = 'http://web4.cs.ucl.ac.uk/staff/g.brostow/MotionSegRecData/files/701_StillsRaw_full.zip';
+    urlLabels = 'http://web4.cs.ucl.ac.uk/staff/g.brostow/MotionSegRecData/data/LabeledApproved_full.zip';
+    zipImages = fullfile(tempdir, 'CamVidImages.zip');
+    zipLabels = fullfile(tempdir, 'CamVidLabels.zip');
+    websave(zipImages, urlImages);
+    websave(zipLabels, urlLabels);
+    unzip(zipImages, datasetFolder);
+    unzip(zipLabels, datasetFolder);
+end
+
+% Define image and label folder paths inside datasetFolder
+imageDir = fullfile(datasetFolder,'701_StillsRaw_full');
+labelDir = fullfile(datasetFolder,'LabeledApproved_full');
+
+% Create datastores
+imds = imageDatastore(imageDir);
+
+% Define classes and label IDs based on the dataset's documentation
+classes = {'Sky','Building','Pole','Road','Pavement','Tree','SignSymbol','Fence','Car','Pedestrian','Bicyclist'};
+labelIDs = [1,2,3,4,5,6,7,8,9,10,11]; % These should match your dataset's labels
+
+pxds = pixelLabelDatastore(labelDir, classes, labelIDs);
+
+% Preview one example
+I = readimage(imds, 1);
+L = readimage(pxds, 1);
+B = labeloverlay(I, L);
+figure; imshow(B); title('Overlay of image and labels');
+
+
+
+CNN for Object Detection
+1. Load training images and bounding box labels. 2. Select pretrained backbone (e.g., ResNet-50). 3. Train YOLO or Faster R-CNN. 4. Test detection on new images.=========>10.3
+clc; clear; close all;
+
+% Download pretrained detector if missing
+filename = 'fasterRCNNResNet50EndToEndVehicleExample.mat';
+if ~isfile(filename)
+    disp('Downloading pretrained detector...');
+    url = 'https://www.mathworks.com/supportfiles/vision/data/fasterRCNNResNet50EndToEndVehicleExample.mat';
+    websave(filename, url);
+    disp('Download complete.');
+end
+
+% Load pretrained detector
+data = load(filename);
+pretrainedDetector = data.detector;
+
+% Define object classes
+yourClasses = {'circle', 'square'};
+inputSize = pretrainedDetector.Network.Layers(1).InputSize;
+
+% Generate synthetic data
+numImages = 100;
+imageFolder = fullfile(tempdir, 'SyntheticObj', 'images');
+if ~exist(imageFolder, 'dir'), mkdir(imageFolder); end
+imageFilenames = strings(numImages,1);
+bboxCells = cell(numImages,1);
+labelCells = cell(numImages,1);
+shapeTypes = ["circle", "square"];
+
+for i = 1:numImages
+    img = uint8(zeros(inputSize));
+    nObj = randi([1 3]);
+    bboxes = zeros(nObj,4);
+    labels = strings(nObj, 1);
+
+    for j = 1:nObj
+        shape = shapeTypes(randi(numel(shapeTypes)));
+
+        switch shape
+            case "circle"
+                radius = randi([20 40]);
+                centerX = randi([radius + 10, inputSize(2) - radius - 10]);
+                centerY = randi([radius + 10, inputSize(1) - radius - 10]);
+                [X,Y] = meshgrid(1:inputSize(2), 1:inputSize(1));
+                mask = (X-centerX).^2 + (Y-centerY).^2 <= radius^2;
+                img(:,:,1) = img(:,:,1).*uint8(~mask) + uint8(mask)*255;
+                x_bbox = centerX - radius;
+                y_bbox = centerY - radius;
+                w_bbox = 2 * radius;
+                h_bbox = 2 * radius;
+                bboxes(j,:) = [x_bbox y_bbox w_bbox h_bbox];
+                labels(j) = "circle";
+
+            case "square"
+                w = randi([30 60]);
+                h = w;
+                x = randi([10 inputSize(2)-w-10]);
+                y = randi([10 inputSize(1)-h-10]);
+                img(y:y+h, x:x+w, 2) = 255;
+                bboxes(j,:) = [x y w h];
+                labels(j) = "square";
+        end
+    end
+
+    filename = fullfile(imageFolder, sprintf('img_%03d.png', i));
+    imwrite(img, filename);
+    imageFilenames(i) = filename;
+    bboxCells{i} = bboxes;
+    labelCells{i} = categorical(labels);
+end
+
+% Prepare training data table
+trainingData = table(imageFilenames, bboxCells, labelCells, ...
+    'VariableNames', {'imageFilename','objectBoundingBoxes','objectLabels'});
+
+% Create datastores
+imds = imageDatastore(trainingData.imageFilename);
+bldsInputTable = table(trainingData.objectBoundingBoxes, trainingData.objectLabels, ...
+    'VariableNames', {'objectBoundingBoxes','objectLabels'});
+blds = boxLabelDatastore(bldsInputTable);
+
+dsTrain = combine(imds, blds);
+
+% Modify pretrained network for new classes
+lgraph = layerGraph(pretrainedDetector.Network);
+layerNames = string({lgraph.Layers.Name}');
+src = string(lgraph.Connections.Source);
+dst = string(lgraph.Connections.Destination);
+
+% Find classification layer
+classLayerIdx = find(arrayfun(@(l) isa(l,'nnet.cnn.layer.ClassificationOutputLayer') || ...
+    isa(l,'nnet.layer.ClassificationLayer'), lgraph.Layers));
+classLayer = lgraph.Layers(classLayerIdx);
+
+% Find preceding fully connected layer
+currentIdx = classLayerIdx;
+while true
+    currentLayerName = layerNames(currentIdx);
+    prevIdx = find(dst == currentLayerName);
+    prevLayerName = src(prevIdx);
+    prevLayerIdx = find(layerNames == prevLayerName);
+    prevLayer = lgraph.Layers(prevLayerIdx);
+    if isa(prevLayer,'nnet.cnn.layer.FullyConnectedLayer') || isa(prevLayer,'nnet.cnn.layer.Convolution2DLayer')
+        fcClassLayer = prevLayer;
+        break;
+    else
+        currentIdx = prevLayerIdx;
+    end
+end
+
+% Find box regression layer
+fcLayers = lgraph.Layers(arrayfun(@(l) isa(l,'nnet.cnn.layer.FullyConnectedLayer'), lgraph.Layers));
+fcBoxLayer = [];
+for k = 1:numel(fcLayers)
+    if ~strcmp(fcLayers(k).Name, fcClassLayer.Name)
+        fcBoxLayer = fcLayers(k);
+        break;
+    end
+end
+connectionIdx = src == fcBoxLayer.Name;
+boxDeltaLayerName = dst(connectionIdx);
+boxDeltaLayerName = boxDeltaLayerName(1);
+
+% Replace layers
+numClasses = numel(yourClasses);
+lgraph = replaceLayer(lgraph, fcClassLayer.Name, ...
+    fullyConnectedLayer(numClasses+1,'Name',fcClassLayer.Name,'WeightLearnRateFactor',10,'BiasLearnRateFactor',10));
+lgraph = replaceLayer(lgraph, classLayer.Name, classificationLayer('Name',classLayer.Name));
+lgraph = replaceLayer(lgraph, fcBoxLayer.Name, ...
+    fullyConnectedLayer(4*numClasses,'Name',fcBoxLayer.Name,'WeightLearnRateFactor',10,'BiasLearnRateFactor',10));
+lgraph = replaceLayer(lgraph, boxDeltaLayerName, rcnnBoxRegressionLayer('Name',boxDeltaLayerName));
+
+% Training options
+%options = trainingOptions('sgdm', ...
+ %   'MiniBatchSize',4, ...
+  %  'InitialLearnRate',1e-3, ...
+   % 'MaxEpochs',5, ...
+    %'Verbose',true, ...
+    %'Plots','training-progress');
+% Training options (Modified for better convergence)
+options = trainingOptions('sgdm', ...
+    'MiniBatchSize', 8, ...     % Increased from 4 to 8 for faster iteration
+    'InitialLearnRate', 1e-3, ...
+    'MaxEpochs', 30, ...        % Increased from 5 to 30 (or higher)
+    'Verbose', true, ...
+    'Plots','training-progress');
+
+% Train detector
+detector = trainFasterRCNNObjectDetector(dsTrain, lgraph, options);
+
+% Test detector
+testImage = imread(trainingData.imageFilename{1});
+%[bboxes, scores, labels] = detect(detector, testImage);
+%detectedImg = insertObjectAnnotation(testImage, 'rectangle', bboxes, cellstr(labels));
+detectedImg = insertObjectAnnotation(testImage, 'rectangle', bboxes, cellstr(labels), 'TextBoxOpacity', 0.9, 'Color', 'cyan', 'LineWidth', 3);
+[bboxes, scores, labels] = detect(detector, testImage, 'Threshold', 0.1);
+figure; imshow(detectedImg);
+title('Detection Results on Synthetic Image');
+
+
