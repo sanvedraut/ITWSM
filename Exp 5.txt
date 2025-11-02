@@ -1,0 +1,273 @@
+──────────────────────────────────────────────
+EXPERIMENT 5 – PLOTTING DATA USING MATLAB
+──────────────────────────────────────────────
+exercise 1:
+👣 Baby Steps (Plotting Function and Its Derivatives)
+
+We will plot:
+✅ Function → y = 3x³ – 26x + 10  
+✅ First Derivative → dy/dx  
+✅ Second Derivative → d²y/dx²
+
+──────────────────────────────────────────────
+🪜 Steps for Aaryaman:
+
+1️⃣ Open MATLAB.  
+2️⃣ Click on *New Script*.  
+3️⃣ Type or copy the code given below.  
+4️⃣ Save it as *Exp5_PlottingData.m*.  
+5️⃣ Click *Run* (or press F5).  
+6️⃣ See the plot in the *Figure Window*.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Plotting a function and its derivatives
+
+% Define x values from -2 to 4
+x = -2:0.1:4;
+
+% Define the function y(x)
+y = 3*x.^3 - 26*x + 10;            % Original function
+
+% Calculate first derivative (numerically)
+dy = diff(y)./diff(x);
+
+% Calculate second derivative (numerically)
+d2y = diff(dy)./diff(x(1:end-1));
+
+% Plot all three on the same graph
+figure;
+plot(x, y, 'b', 'LineWidth', 2); hold on;
+plot(x(1:end-1), dy, 'r--', 'LineWidth', 2);
+plot(x(1:end-2), d2y, 'g-.', 'LineWidth', 2);
+
+% Label the graph
+xlabel('x');
+ylabel('y');
+title('Function and Its Derivatives');
+legend('y', 'dy/dx', 'd^2y/dx^2');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📊 A graph appears showing:
+🔹 *Blue line:* Original function y  
+🔹 *Red dashed line:* First derivative (dy/dx)  
+🔹 *Green dash-dot line:* Second derivative (d²y/dx²)
+
+──────────────────────────────────────────────
+💡 NOTE:
+- diff() finds differences between adjacent values (approximation of derivative).  
+- Derivatives show slope and curvature of the function.  
+- The graph helps visualize how y, dy/dx, and d²y/dx² change with x.
+
+──────────────────────────────────────────────
+
+Exercise 2:
+👣 BABY STEPS (Exercise 5.2 — Plot the Function f(t))
+
+We will plot:
+f(t) = (t + 5)² / (4 + 3t²)  for  -3 ≤ t ≤ 5
+
+──────────────────────────────────────────────
+🪜 Steps for Aaryaman:
+
+1️⃣ Open MATLAB.  
+2️⃣ Click *New Script*.  
+3️⃣ Copy the code below.  
+4️⃣ Save it as *Exp5_Exercise2_FunctionPlot.m*.  
+5️⃣ Click *Run* (or press F5).  
+6️⃣ See the function curve in the Figure window.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+x = -3:0.1:5;
+f = ((x + 5).^2) ./ (4*x + 3*x.^2);
+
+figure;
+plot(x, f, 'm', 'LineWidth', 2);
+xlabel('x'); ylabel('f(x)');
+title('f(x) = (x+5)^2 / (4x + 3x^2)');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📈 A magenta-colored smooth curve appears for the function  
+f(x) = (x + 5)² / (4x + 3x²)
+
+──────────────────────────────────────────────
+
+
+Exercise 3:
+👣 BABY STEPS (Exercise 5.3 — Wheatstone Bridge Plot)
+
+We will plot:
+vAB = v * (R₂ / (R₁ + R₂) - R₄ / (R₃ + R₄))  
+for two different cases.
+
+──────────────────────────────────────────────
+🪜 Steps for Aaryaman:
+
+1️⃣ Open MATLAB.  
+2️⃣ Click *New Script*.  
+3️⃣ Copy the code below.  
+4️⃣ Save as *Exp5_Exercise3_WheatstoneBridge.m*.  
+5️⃣ Click *Run*.  
+6️⃣ Observe two subplots on the same figure.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+E = 12;
+R3 = 250; R4 = 250;
+
+% Case (a)
+R1 = 500; R2 = 120;
+R5 = 0:50:500;
+vAB1 = E .* ((R3./(R3 + R4)) - (R2./(R1 + R2)));
+
+% Case (b)
+R1 = 120; R2 = 120;
+vAB2 = E .* ((R3./(R3 + R4)) - (R2./(R1 + R2)));
+
+figure;
+subplot(2,1,1);
+plot(R5, vAB1, 'b', 'LineWidth', 2);
+xlabel('R5 (Ω)'); ylabel('vAB (V)');
+title('Case (a): R1=500Ω, R2=120Ω');
+
+subplot(2,1,2);
+plot(R5, vAB2, 'r--', 'LineWidth', 2);
+xlabel('R5 (Ω)'); ylabel('vAB (V)');
+title('Case (b): R1=120Ω, R2=120Ω');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+📊 A figure appears with two plots:
+🔹 *Top plot (blue line):* vAB vs R₁ for Case (a)  
+🔹 *Bottom plot (red dashed line):* vAB vs R₂ for Case (b)
+
+──────────────────────────────────────────────
+
+Exercise 4:
+
+👣 BABY STEPS (Exercise 5.4 — Plot of cos(x))
+
+We will plot:
+cos(x) vs x  
+with color, marker, and style customizations.
+
+──────────────────────────────────────────────
+🪜 Steps for Aaryaman:
+
+1️⃣ Open MATLAB.  
+2️⃣ Click *New Script*.  
+3️⃣ Copy the code below.  
+4️⃣ Save as *Exp5_Exercise4_CosPlot.m*.  
+5️⃣ Click *Run* and observe the styled graph.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+x = 0:0.1:10*pi;
+y = cos(x);
+
+figure('Color','y');  % Yellow background
+plot(x, y, 'b--s', 'MarkerEdgeColor','m', 'MarkerFaceColor','c', 'MarkerSize',5);
+xlabel('x');
+ylabel('cos(x)');
+title('Plot of cos(x) vs x');
+grid on;
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual):
+
+🎨 A yellow background plot appears showing:
+🔹 *Dashed red line* replaced by *blue* in code  
+🔹 *Square markers* with magenta edges and cyan faces  
+🔹 Properly labeled axes and grid lines.
+
+──────────────────────────────────────────────
+
+
+Eercise 5:
+👣 BABY STEPS (Exercise 5.5 — Audio Waveform and Spectrogram)
+
+We will:
+🎵 Generate 9 tone frequencies  
+🎵 Append a doubled waveform  
+🎵 Play the sound  
+🎵 Save as WAV  
+🎵 Plot its spectrogram
+
+──────────────────────────────────────────────
+🪜 Steps for Aaryaman:
+
+1️⃣ Open MATLAB.  
+2️⃣ Click *New Script*.  
+3️⃣ Copy the code below.  
+4️⃣ Save as *Exp5_Exercise5_AudioSignal.m*.  
+5️⃣ Plug in your earphones or turn on speakers.  
+6️⃣ Click *Run* (F5).  
+7️⃣ Listen to the sound and view the spectrogram.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+clc; clear; close all;
+
+fs = 8000; % 8 kHz sampling frequency
+t = 0:1/fs:1; % 1 second duration
+
+% Given frequencies
+freqs = [659, 622, 659, 622, 659, 494, 587, 523, 440];
+
+% Generate tone sequence
+signal = [];
+for f = freqs
+    tone = sin(2*pi*f*t);
+    signal = [signal tone];
+end
+
+% Append waveform with doubled amplitude
+signal2 = 2 * signal;
+combined = [signal signal2];
+
+% Play the sound
+sound(combined, fs);
+
+% Save to WAV file
+audiowrite('tone_sequence.wav', combined, fs);
+
+% Plot spectrogram
+figure;
+spectrogram(combined, 256, 200, 256, fs, 'yaxis');
+title('Spectrogram of Generated Audio');
+xlabel('Time (s)');
+ylabel('Frequency (kHz)');
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Visual + Audio):
+
+🎧 You’ll hear a sequence of musical tones.  
+🎶 The spectrogram window shows the tone frequencies over time.
+
+──────────────────────────────────────────────
+💡 NOTE:
+- sound() plays the audio.  
+- audiowrite() saves it to a .wav file.  
+- spectrogram() visualizes how frequency varies over time.
+
+──────────────────────────────────────────────
