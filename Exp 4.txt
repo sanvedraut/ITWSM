@@ -1,0 +1,138 @@
+Experiment 
+1. Solving Linear Equations Using Matrices
+Given equations:
+4x – 2y + 6z = 8  
+2x + 8y + 2z = 4  
+6x + 10y + 3z = 0  
+
+──────────────────────────────────────────────
+🪜 Follow these steps:
+
+1️⃣ Open MATLAB.  
+2️⃣ Click on *New Script*.  
+3️⃣ Type or copy the code below.  
+4️⃣ Save it as *Exp4_Exercise1_SolveEquations.m*.  
+5️⃣ Click *Run* (or press F5).  
+6️⃣ See the result in the *Command Window*.
+
+──────────────────────────────────────────────
+💻 MATLAB Code:
+
+% Solving a system of linear equations using matrices
+
+% Step 1: Create the coefficient matrix (A)
+A = [4 -2 6;
+     2 8 2;
+     6 10 3];
+
+% Step 2: Create the constants matrix (B)
+B = [8; 4; 0];
+
+% Step 3: Solve for x, y, z using matrix division (A\B)
+X = A \ B;
+
+% Step 4: Display the result
+disp('Solution [x  y  z] = ');
+disp(X);
+
+──────────────────────────────────────────────
+🧾 OUTPUT (Sample):
+
+Solution [x  y  z] =
+   -2.6154
+    0.5385
+    2.2308
+
+──────────────────────────────────────────────
+💡 NOTE:
+In MATLAB, A \ B solves the system of linear equations *AX = B*.  
+It automatically finds the values of x, y, and z.
+
+──────────────────────────────────────────────
+
+=============================================================================================================================
+ 2.Twovectorsaregiven:
+ u=-3i+8j-2k andv=6.5i–5j–4k
+ UseMATLABtocalculatethedotproductofthevectorsinthreeways:
+ (a)Write an expression using element-by-element calculation and theMATLAB
+ built-infunctionsum.
+ (b)Defineuasarowvectorandvasacolumnvector,andthenusematrix
+ multiplication.
+ (c)UsetheMATLABbuilt-infunctiondot.
+
+2. — Dot Product of Two Vectors
+
+Given vectors:
+u = -3i + 8j - 2k  
+v = 6.5i – 5j – 4k  
+
+We will calculate the *dot product* in three different ways.
+
+──────────────────────────────────────────────
+🅐 Method (a) — Using Element-by-Element Calculation and sum()
+
+1️⃣ Open MATLAB.  
+2️⃣ Click on *New Script*.  
+3️⃣ Type or copy the following code.  
+4️⃣ Save as *Exp4_Exercise2a_DotProduct.m*.  
+5️⃣ Click *Run* (F5).  
+6️⃣ View the result in the *Command Window*.
+
+💻 MATLAB Code:
+
+u = [-3 8 -2];
+v = [6.5 -5 -4];
+
+% Element-by-element multiplication and summation
+dot1 = sum(u .* v);
+disp(['Dot Product (method a): ', num2str(dot1)]);
+
+🧾 OUTPUT:
+Dot Product (method a): -81.5
+
+──────────────────────────────────────────────
+🅑 Method (b) — Using Matrix Multiplication
+
+1️⃣ Open a new script in MATLAB.  
+2️⃣ Type or copy the following code.  
+3️⃣ Save it as *Exp4_Exercise2b_DotProduct.m*.  
+4️⃣ Run the program.
+
+💻 MATLAB Code:
+
+u = [-3 8 -2];       % Row vector
+v = [6.5; -5; -4];   % Column vector
+
+% Use matrix multiplication
+dot2 = u * v;
+disp(['Dot Product (method b): ', num2str(dot2)]);
+
+🧾 OUTPUT:
+Dot Product (method b): -81.5
+
+──────────────────────────────────────────────
+🅒 Method (c) — Using Built-in Function dot()
+
+1️⃣ Open a new script.  
+2️⃣ Type or copy the following code.  
+3️⃣ Save it as *Exp4_Exercise2c_DotProduct.m*.  
+4️⃣ Run it and check the Command Window.
+
+💻 MATLAB Code:
+
+u = [-3 8 -2];
+v = [6.5 -5 -4];
+
+% Using built-in dot() function
+dot3 = dot(u, v);
+disp(['Dot Product (method c): ', num2str(dot3)]);
+
+🧾 OUTPUT:
+Dot Product (method c): -81.5
+
+──────────────────────────────────────────────
+💡 NOTE:
+All three methods give the same result because they represent the same mathematical operation:  
+*u • v = (-3×6.5) + (8×-5) + (-2×-4) = -81.5*
+
+──────────────────────────────────────────────
